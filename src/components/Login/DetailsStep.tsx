@@ -27,11 +27,11 @@ const DetailsStep: React.FC<DetailsStepProps> = ({ onContinue, isFilled = false 
   };
 
   return (
-    <div className="animate-fade-up">
-      <h2 className="text-2xl font-bold text-[#1C3141] mb-6">Add Your Details</h2>
+    <div className="animate-fade-up flex flex-col h-full gap-y-4">
+      <h2 className="text-[26px] font-bold text-[#1a2b3c] leading-tight mb-2">Add Your Details</h2>
 
       <div 
-        className={`w-[120px] h-[120px] rounded-xl flex flex-col items-center justify-center cursor-pointer mx-auto mb-8 relative transition-all ${profileImage ? 'border-none' : 'border-2 border-dashed border-[#e0e0e0] hover:border-[#1C3141]'}`}
+        className={`w-[100px] h-[100px] rounded-xl flex flex-col items-center justify-center cursor-pointer mx-auto relative transition-all ${profileImage ? 'border-none' : 'border-2 border-dashed border-[#dddddd] bg-[#fafafa] hover:border-[#1a2b3c]'}`}
         onClick={() => fileInputRef.current?.click()}
       >
         <input 
@@ -44,27 +44,27 @@ const DetailsStep: React.FC<DetailsStepProps> = ({ onContinue, isFilled = false 
         {profileImage ? (
           <div className="relative w-full h-full">
             <img src={profileImage} alt="Profile" className="w-full h-full object-cover rounded-xl" />
-            <div className="absolute -top-2 -right-2 bg-[#e74c3c] text-white w-5 h-5 rounded-full flex items-center justify-center text-xs cursor-pointer" onClick={(e) => {
+            <div className="absolute -top-2 -right-2 bg-[#e74c3c] text-white w-5 h-5 rounded-full flex items-center justify-center text-xs cursor-pointer shadow-md" onClick={(e) => {
               e.stopPropagation();
               setProfileImage(null);
             }}>✕</div>
           </div>
         ) : (
-          <>
-            <div className="text-2xl text-[#bdc3c7] mb-2">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-            </div>
-            <span className="text-[10px] text-[#bdc3c7] text-center font-medium">Add Your Profile picture</span>
-          </>
+          <div className="flex flex-col items-center gap-1.5 grayscale opacity-60">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            <span className="text-[9px] text-[#556677] text-center font-bold px-2 uppercase tracking-tight">Add Your Profile Picture</span>
+          </div>
         )}
       </div>
 
-      <div className="mb-4 relative">
-        <label className="block text-xs font-semibold text-[#1C3141] mb-2">Name*</label>
-        <div className="relative border border-[#e0e0e0] rounded-lg p-3 flex items-center transition-colors focus-within:border-[#1C3141]">
+      <div className="relative group">
+        <label className="absolute -top-2.5 left-4 bg-white px-2 text-[13px] font-medium text-[#778899] z-10">
+          Name*
+        </label>
+        <div className="relative border border-[#dddddd] rounded-lg p-3 flex items-center transition-all focus-within:border-[#2c3e50]">
           <input
             type="text"
-            className="border-none bg-transparent outline-none w-full text-[15px] text-[#1C3141] font-semibold placeholder:font-normal"
+            className="border-none bg-transparent outline-none w-full text-base text-[#1a2b3c] font-bold placeholder:font-normal placeholder:text-[#bbbbbb]"
             placeholder="Enter your Full Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -72,12 +72,14 @@ const DetailsStep: React.FC<DetailsStepProps> = ({ onContinue, isFilled = false 
         </div>
       </div>
 
-      <div className="mb-4 relative">
-        <label className="block text-xs font-semibold text-[#1C3141] mb-2">Email</label>
-        <div className="relative border border-[#e0e0e0] rounded-lg p-3 flex items-center transition-colors focus-within:border-[#1C3141]">
+      <div className="relative group">
+        <label className="absolute -top-2.5 left-4 bg-white px-2 text-[13px] font-medium text-[#778899] z-10">
+          Email
+        </label>
+        <div className="relative border border-[#dddddd] rounded-lg p-3 flex items-center transition-all focus-within:border-[#2c3e50]">
           <input
             type="email"
-            className="border-none bg-transparent outline-none w-full text-[15px] text-[#1C3141] font-semibold placeholder:font-normal"
+            className="border-none bg-transparent outline-none w-full text-base text-[#1a2b3c] font-bold placeholder:font-normal placeholder:text-[#bbbbbb]"
             placeholder="Enter your Email Address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -85,23 +87,25 @@ const DetailsStep: React.FC<DetailsStepProps> = ({ onContinue, isFilled = false 
         </div>
       </div>
 
-      <div className="mb-6 relative">
-        <label className="block text-xs font-semibold text-[#1C3141] mb-2">Your qualification*</label>
-        <div className="relative border border-[#e0e0e0] rounded-lg p-3 flex items-center transition-colors focus-within:border-[#1C3141] cursor-pointer">
+      <div className="relative group">
+        <label className="absolute -top-2.5 left-4 bg-white px-2 text-[13px] font-medium text-[#778899] z-10">
+          Your qualification*
+        </label>
+        <div className="relative border border-[#dddddd] rounded-lg p-3 flex items-center transition-all focus-within:border-[#2c3e50] cursor-pointer">
           <input
             type="text"
-            className="border-none bg-transparent outline-none w-full text-[15px] text-[#1C3141] font-semibold cursor-pointer placeholder:font-normal"
+            className="border-none bg-transparent outline-none w-full text-base text-[#1a2b3c] font-bold cursor-pointer placeholder:font-normal placeholder:text-[#bbbbbb]"
             placeholder="Select qualification"
             readOnly
           />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[#bdc3c7]">
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[#bbbbbb]">
              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
           </div>
         </div>
       </div>
 
       <button 
-        className="w-full bg-[#1C3141] text-white py-3.5 rounded-lg font-semibold text-base cursor-pointer hover:bg-[#162633] active:scale-[0.98] transition-all mt-4"
+        className="w-full bg-[#1c2d3a] text-white py-4 rounded-xl font-bold text-base cursor-pointer hover:bg-[#15232d] active:scale-[0.98] transition-all mt-auto"
         onClick={onContinue}
       >
         Get Started
