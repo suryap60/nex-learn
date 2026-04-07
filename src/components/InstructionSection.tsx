@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Button from "./ui/Button";
 
 const InstructionSection: React.FC = () => {
   return (
@@ -17,14 +18,18 @@ const InstructionSection: React.FC = () => {
             priority
           />
         </div>
-        <button className="absolute right-8 top-1/2 -translate-y-1/2 bg-[#2c7a7b] text-white px-6 py-2 rounded-md text-sm font-semibold hover:bg-[#285e61] transition-colors">
+        <Button 
+          variant="teal" 
+          size="sm" 
+          className="absolute right-8 top-1/2 -translate-y-1/2"
+        >
           Logout
-        </button>
+        </Button>
       </header>
 
       {/* Content */}
       <main className="max-w-[1000px] mx-auto pt-10 pb-20 px-8 flex flex-col items-center">
-        <h1 className="text-2xl md:text-3xl font-bold text-[#1a2b3c] mb-10 text-center">
+        <h1 className="text-2xl md:text-3xl font-bold text-[#1a2b3c] mb-10 text-center font-poppins">
           Ancient Indian History MCQ
         </h1>
 
@@ -63,9 +68,13 @@ const InstructionSection: React.FC = () => {
 
         {/* Footer Button */}
         <div className="mt-16 w-full flex justify-center">
-           <button className="bg-[#1c2d3a] text-white px-16 py-3.5 rounded-lg font-bold text-lg hover:bg-[#15232d] shadow-lg transition-all active:scale-[0.98]">
+           <Button 
+             variant="primary" 
+             size="xl" 
+             className="px-20"
+           >
               Start Test
-           </button>
+           </Button>
         </div>
       </main>
     </div>

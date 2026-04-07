@@ -2,9 +2,14 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Button from "./ui/Button";
 
 const McqSection: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<string>("B");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(1);
+
   const options = [
     { id: "A", text: "Pataliputra" },
     { id: "B", text: "Harappa" },
@@ -41,7 +46,15 @@ const McqSection: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f0f9ff] font-inter">
+    <div className="min-h-screen bg-[#f0f9ff] font-inter relative">
+      {/* Dimmed Background Overlay */}
+      {(isModalOpen || isSubmitModalOpen) && (
+        <div className="fixed inset-0 bg-black/50 z-40 animate-fade-in" onClick={() => {
+          setIsModalOpen(false);
+          setIsSubmitModalOpen(false);
+        }}></div>
+      )}
+
       {/* Header */}
       <header className="bg-white px-8 py-4 flex items-center justify-center relative shadow-sm border-b border-[#e5edf5]">
         <div className="relative w-48 h-12">
@@ -53,9 +66,13 @@ const McqSection: React.FC = () => {
             priority
           />
         </div>
-        <button className="absolute right-8 top-1/2 -translate-y-1/2 bg-[#2c7a7b] text-white px-6 py-2 rounded-md text-sm font-semibold hover:bg-[#285e61]">
+        <Button 
+          variant="teal" 
+          size="sm" 
+          className="absolute right-8 top-1/2 -translate-y-1/2"
+        >
           Logout
-        </button>
+        </Button>
       </header>
 
       {/* Main Container */}
@@ -64,18 +81,23 @@ const McqSection: React.FC = () => {
         {/* Left Section - Question Area */}
         <div className="flex-[1.8] flex flex-col gap-6">
           <div className="flex justify-between items-center px-2">
-            <h2 className="text-lg font-bold text-[#1a2b3c]">Ancient Indian History MCQ</h2>
+            <h2 className="text-lg font-bold text-[#1a2b3c] font-poppins">Ancient Indian History MCQ</h2>
             <div className="bg-white px-3 py-1.5 rounded-lg border border-[#e5edf5] text-sm font-bold text-[#556677]">
-              01/100
+              {currentQuestion.toString().padStart(2, '0')}/100
             </div>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-[#e5edf5] p-6 lg:p-8 min-h-[500px] flex flex-col relative">
-            <button className="bg-[#2c7a7b] text-white px-4 py-2 rounded-md text-sm font-bold flex items-center gap-2 mb-6 self-start">
+            <Button 
+              variant="teal" 
+              size="sm" 
+              className="mb-6 self-start text-[13px]"
+              onClick={() => setIsModalOpen(true)}
+            >
                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                Read Comprehensive Paragraph
                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
+            </Button>
 
             <div className="mb-6">
               <p className="text-[17px] font-bold text-[#1a2b3c] leading-relaxed mb-6">
@@ -107,22 +129,43 @@ const McqSection: React.FC = () => {
 
           {/* Question Actions */}
           <div className="flex gap-4 items-center">
-             <button className="flex-1 bg-[#805ad5] text-white py-4 rounded-lg font-bold text-base hover:bg-[#6b46c1] transition-all active:scale-[0.98]">
+             <Button 
+               variant="purple" 
+               fullWidth
+               className="py-4"
+             >
                Mark for review
-             </button>
-             <button className="flex-1 bg-[#d1d5db] text-[#556677] py-4 rounded-lg font-bold text-base cursor-not-allowed">
-               Pervious
-             </button>
-             <button className="flex-1 bg-[#1c2d3a] text-white py-4 rounded-lg font-bold text-base hover:bg-[#15232d] transition-all active:scale-[0.98]">
-               Next
-             </button>
+             </Button>
+             <Button 
+               variant="soft" 
+               fullWidth
+               className="py-4"
+               disabled={currentQuestion === 1}
+               onClick={() => setCurrentQuestion(prev => prev - 1)}
+             >
+               Previous
+             </Button>
+             <Button 
+               variant="primary" 
+               fullWidth
+               className="py-4"
+               onClick={() => {
+                 if (currentQuestion < 100) {
+                    setCurrentQuestion(prev => prev + 1);
+                 } else {
+                    setIsSubmitModalOpen(true);
+                 }
+               }}
+             >
+               {currentQuestion === 100 ? "Submit" : "Next"}
+             </Button>
           </div>
         </div>
 
         {/* Right Section - Status Panel */}
         <div className="flex-1 flex flex-col gap-6">
            <div className="flex justify-between items-end">
-              <h3 className="text-sm font-bold text-[#1a2b3c]">Question No. Sheet:</h3>
+              <h3 className="text-sm font-bold text-[#1a2b3c]">Question Numbers:</h3>
               <div className="flex flex-col items-end gap-1">
                  <span className="text-[11px] font-bold text-[#556677] uppercase tracking-wider">Remaining Time:</span>
                  <div className="bg-[#1c2d3a] text-white px-3 py-1.5 rounded-md flex items-center gap-2 font-bold text-base shadow-sm">
@@ -137,7 +180,8 @@ const McqSection: React.FC = () => {
                  {questionStatus.map((q) => (
                     <div 
                       key={q.id}
-                      className={`aspect-square flex items-center justify-center rounded-lg border text-sm font-bold cursor-pointer transition-all hover:scale-105 ${getStatusClass(q.status)}`}
+                      onClick={() => setCurrentQuestion(q.id)}
+                      className={`aspect-square flex items-center justify-center rounded-lg border text-sm font-bold cursor-pointer transition-all hover:scale-105 ${currentQuestion === q.id ? 'ring-2 ring-[#1c2d3a] ring-offset-2' : ''} ${getStatusClass(q.status)}`}
                     >
                       {q.id}
                     </div>
@@ -161,6 +205,99 @@ const McqSection: React.FC = () => {
            </div>
         </div>
       </main>
+
+      {/* Comprehensive Paragraph Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-[850px] max-h-[90vh] overflow-hidden flex flex-col animate-scale-in shadow-2xl">
+            <div className="p-8 border-b border-[#e5edf5]">
+               <h2 className="text-xl font-bold text-[#1a2b3c] font-poppins">Comprehensive Paragraph</h2>
+            </div>
+            
+            <div className="p-8 overflow-y-auto custom-scrollbar text-[15px] text-[#2c3e50] leading-[1.8] space-y-6 font-medium">
+              <p>Ancient Indian history spans several millennia and offers a profound glimpse into the origins of one of the world&apos;s oldest and most diverse civilizations. It begins with the Indus Valley Civilization (c. 2500–1500 BCE), which is renowned for its advanced urban planning, architecture, and water management systems.</p>
+              <p>It was during this time that the varna system (social hierarchy) began to develop, which later evolved into the caste system.</p>
+              <p>The 6th century BCE marked a turning point with the emergence of new religious and philosophical movements. Buddhism and Jainism, led by Gautama Buddha and Mahavira, challenged the existing Vedic orthodoxy.</p>
+              <p>The Maurya Empire (c. 322–185 BCE), founded by Chandragupta Maurya, became the first large empire to unify much of the Indian subcontinent.</p>
+            </div>
+
+            <div className="p-6 bg-[#fafafa] border-t border-[#e5edf5] flex justify-end">
+              <Button variant="primary" size="lg" className="px-12" onClick={() => setIsModalOpen(false)}>Minimize</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Submit Test Modal */}
+      {isSubmitModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-[420px] overflow-hidden flex flex-col animate-scale-in shadow-2xl relative">
+            <button 
+              className="absolute right-5 top-5 text-[#8899aa] hover:text-[#1a2b3c] transition-colors"
+              onClick={() => setIsSubmitModalOpen(false)}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+
+            <div className="p-8 pb-4">
+               <h2 className="text-[17px] font-bold text-[#1a2b3c] font-poppins text-center mb-10">Are you sure you want to submit the test?</h2>
+            </div>
+            
+            <div className="px-10 pb-10 space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#1c2d3a] flex items-center justify-center text-white">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  </div>
+                  <span className="text-[14px] font-bold text-[#556677]">Remaining Time:</span>
+                </div>
+                <span className="text-[14px] font-bold text-[#1a2b3c]">87:13</span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#f39c12] flex items-center justify-center text-white">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                  </div>
+                  <span className="text-[14px] font-bold text-[#556677]">Total Questions:</span>
+                </div>
+                <span className="text-[14px] font-bold text-[#1a2b3c]">100</span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#2ecc71] flex items-center justify-center text-white">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                  </div>
+                  <span className="text-[14px] font-bold text-[#556677]">Questions Answered:</span>
+                </div>
+                <span className="text-[14px] font-bold text-[#1a2b3c]">003</span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#805ad5] flex items-center justify-center text-white">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                  </div>
+                  <span className="text-[14px] font-bold text-[#556677]">Marked for review:</span>
+                </div>
+                <span className="text-[14px] font-bold text-[#1a2b3c]">001</span>
+              </div>
+
+              <div className="pt-4">
+                <Button 
+                  variant="primary" 
+                  fullWidth 
+                  className="py-4 shadow-lg active:scale-95"
+                  onClick={() => alert("Test Submitted!")}
+                >
+                  Submit Test
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

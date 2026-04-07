@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import Image from "next/image";
+import Button from "../ui/Button";
 
 interface DetailsStepProps {
   onContinue: () => void;
@@ -104,12 +104,15 @@ const DetailsStep: React.FC<DetailsStepProps> = ({ onContinue, isFilled = false 
         </div>
       </div>
 
-      <button 
-        className="w-full bg-[#1c2d3a] text-white py-4 rounded-xl font-bold text-base cursor-pointer hover:bg-[#15232d] active:scale-[0.98] transition-all mt-auto"
+      <Button 
+        variant="primary"
+        size="xl"
+        fullWidth
+        className="mt-auto"
         onClick={onContinue}
       >
         Get Started
-      </button>
+      </Button>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Button from "../ui/Button";
 
 interface OtpStepProps {
   onContinue: () => void;
@@ -40,17 +41,23 @@ const OtpStep: React.FC<OtpStepProps> = ({ onContinue, phoneNumber, otp, setOtp 
       </p>
       
       <div className="mb-10">
-        <button className="text-[14px] text-[#1a2b3c] font-bold underline cursor-pointer hover:text-black transition-colors" onClick={() => alert("OTP Resent!")}>
+        <Button 
+          variant="link" 
+          onClick={() => alert("OTP Resent!")}
+        >
           Resend code
-        </button>
+        </Button>
       </div>
 
-      <button 
-        className="w-full bg-[#1c2d3a] text-white py-4 rounded-xl font-bold text-base cursor-pointer hover:bg-[#15232d] active:scale-[0.98] transition-all mt-auto"
+      <Button 
+        variant="primary"
+        size="xl"
+        fullWidth
+        className="mt-auto"
         onClick={onContinue}
       >
         Get Started
-      </button>
+      </Button>
     </div>
   );
 };

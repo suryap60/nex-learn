@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import Button from "../ui/Button";
 
 interface PhoneStepProps {
   onContinue: () => void;
@@ -11,7 +12,7 @@ interface PhoneStepProps {
 const PhoneStep: React.FC<PhoneStepProps> = ({ onContinue, phoneNumber, setPhoneNumber }) => {
   return (
     <div className="animate-fade-up flex flex-col h-full">
-      <h2 className="text-[28px] font-bold text-[#1a2b3c] mb-2">Enter your phone number</h2>
+      <h2 className="text-[28px] font-bold text-[#1a2b3c] mb-2 font-poppins">Enter your phone number</h2>
       <p className="text-[15px] text-[#556677] leading-relaxed mb-10 font-normal">
         We use your mobile number to identify your account
       </p>
@@ -43,12 +44,15 @@ const PhoneStep: React.FC<PhoneStepProps> = ({ onContinue, phoneNumber, setPhone
         By tapping Get started, you agree to the <a href="#" className="text-[#1a2b3c] font-bold underline">Terms & Conditions</a>
       </p>
 
-      <button 
-        className="w-full bg-[#1c2d3a] text-white py-4 rounded-xl font-bold text-base cursor-pointer hover:bg-[#15232d] active:scale-[0.98] transition-all mt-auto"
+      <Button 
+        variant="primary"
+        size="xl"
+        fullWidth
+        className="mt-auto"
         onClick={onContinue}
       >
         Get Started
-      </button>
+      </Button>
     </div>
   );
 };

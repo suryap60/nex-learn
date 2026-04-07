@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Button from "./ui/Button";
 
 const ResultSection: React.FC = () => {
   const stats = [
@@ -24,9 +25,13 @@ const ResultSection: React.FC = () => {
             priority
           />
         </div>
-        <button className="absolute right-8 top-1/2 -translate-y-1/2 bg-[#2c7a7b] text-white px-6 py-2 rounded-md text-sm font-semibold hover:bg-[#285e61] transition-colors">
+        <Button 
+          variant="teal" 
+          size="sm" 
+          className="absolute right-8 top-1/2 -translate-y-1/2"
+        >
           Logout
-        </button>
+        </Button>
       </header>
 
       {/* Content Container */}
@@ -34,7 +39,7 @@ const ResultSection: React.FC = () => {
         
         {/* Score Card */}
         <div className="w-full max-w-[500px] bg-gradient-to-b from-[#1c2d3a] to-[#15232d] p-10 rounded-2xl text-center text-white shadow-2xl mb-12">
-          <span className="text-lg font-medium opacity-90 block mb-3">Marks Obtained:</span>
+          <span className="text-lg font-medium opacity-90 block mb-3 font-poppins">Marks Obtained:</span>
           <h1 className="text-6xl font-bold tracking-tight">100 / 100</h1>
         </div>
 
@@ -54,9 +59,14 @@ const ResultSection: React.FC = () => {
         </div>
 
         {/* Done Button */}
-        <button className="w-full max-w-[500px] bg-[#1c2d3a] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#15232d] shadow-lg transition-all active:scale-[0.98]">
+        <Button 
+          variant="primary" 
+          size="xl" 
+          fullWidth 
+          className="max-w-[500px]"
+        >
           Done
-        </button>
+        </Button>
       </main>
     </div>
   );
