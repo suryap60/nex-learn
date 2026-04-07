@@ -1,4 +1,4 @@
-import ResultSection from "@/src/components/ResultSection";
+import ResultSection from "@/src/components/sections/ResultSection";
 
 
 export default function InstructionsPage() {

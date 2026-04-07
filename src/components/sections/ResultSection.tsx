@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import Button from "./ui/Button";
+import Button from "../ui/Button";
 
 const ResultSection: React.FC = () => {
   const stats = [
@@ -13,21 +13,21 @@ const ResultSection: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f0f9ff] font-inter">
+    <div className="min-h-screen bg-[#F4FCFF] font-inter">
       {/* Header */}
       <header className="bg-white px-8 py-4 flex items-center justify-center relative shadow-sm">
         <div className="relative w-48 h-12">
-          <Image 
-            src="/assets/images/login/logo-2.png" 
-            alt="NexLearn Logo" 
+          <Image
+            src="/assets/images/login/logo-2.png"
+            alt="NexLearn Logo"
             fill
             className="object-contain"
             priority
           />
         </div>
-        <Button 
-          variant="teal" 
-          size="sm" 
+        <Button
+          variant="teal"
+          size="sm"
           className="absolute right-8 top-1/2 -translate-y-1/2"
         >
           Logout
@@ -36,7 +36,7 @@ const ResultSection: React.FC = () => {
 
       {/* Content Container */}
       <main className="max-w-[1000px] mx-auto pt-16 flex flex-col items-center px-6">
-        
+
         {/* Score Card */}
         <div className="w-full max-w-[500px] bg-gradient-to-b from-[#1c2d3a] to-[#15232d] p-10 rounded-2xl text-center text-white shadow-2xl mb-12">
           <span className="text-lg font-medium opacity-90 block mb-3 font-poppins">Marks Obtained:</span>
@@ -59,10 +59,10 @@ const ResultSection: React.FC = () => {
         </div>
 
         {/* Done Button */}
-        <Button 
-          variant="primary" 
-          size="xl" 
-          fullWidth 
+        <Button
+          variant="primary"
+          size="xl"
+          fullWidth
           className="max-w-[500px]"
         >
           Done

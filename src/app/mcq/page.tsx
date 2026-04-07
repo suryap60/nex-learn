@@ -1,4 +1,4 @@
-import McqSection from "@/src/components/McqSection";
+import McqSection from "@/src/components/sections/McqSection";
 
 
 export default function InstructionsPage() {
