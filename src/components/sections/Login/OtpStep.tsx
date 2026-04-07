@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import Button from "../ui/Button";
+import Button from "../../ui/Button";
+import { toast } from "react-toastify";
 
 interface OtpStepProps {
   onContinue: () => void;
@@ -15,7 +16,7 @@ const OtpStep: React.FC<OtpStepProps> = ({ onContinue, phoneNumber, otp, setOtp 
     <div className="animate-fade-up flex flex-col h-full">
       <h2 className="text-[28px] font-bold text-[#1a2b3c] mb-2 leading-tight">Enter the code we texted you</h2>
       <p className="text-[15px] text-[#556677] leading-relaxed mb-10 font-normal">
-        We've sent an SMS to <strong>+91 {phoneNumber || "1234 567891"}</strong>
+        We&apos;ve sent an SMS to <strong>+91 {phoneNumber || "1234 567891"}</strong>
       </p>
 
       <div className="mb-4 relative group">
@@ -43,7 +44,7 @@ const OtpStep: React.FC<OtpStepProps> = ({ onContinue, phoneNumber, otp, setOtp 
       <div className="mb-10">
         <Button 
           variant="link" 
-          onClick={() => alert("OTP Resent!")}
+          onClick={() => toast.success("OTP Resent!")}
         >
           Resend code
         </Button>

@@ -1,10 +1,9 @@
-import Image from "next/image";
-import LoginPage from "./login/page";
+import PhonePage from "./auth/phone/page";
 
 export default function Home() {
   return (
     <div>
-      <LoginPage />
+      <PhonePage />
     </div>
   );
 }
