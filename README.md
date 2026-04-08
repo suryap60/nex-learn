@@ -23,7 +23,7 @@ NexLearn is a state-of-the-art web application designed for a premium exam-takin
 
 ##  Tech Stack
 - **Frontend**: Next.js 14+ (App Router)
-- **Styling**: Tailwind CSS & CSS-in-JS (Styled-JSX)
+- **Styling**: Tailwind CSS 
 - **State Management**: Redux Toolkit
 - **API Client**: Axios with Interceptors
 - **Notifications**: React Toastify
