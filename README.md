@@ -38,7 +38,7 @@ NexLearn is a state-of-the-art web application designed for a premium exam-takin
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone [repository-url]
+   git clone https://github.com/suryap60/nex-learn
    cd nex-learn
    ```
 
@@ -68,12 +68,7 @@ NexLearn is a state-of-the-art web application designed for a premium exam-takin
 - `src/store`: Centralized Redux store configuration.
 
 ## Design System
-NexLearn uses a curate color palette and premium typography:
-- **Brand Colors**: 
-  - Primary Teal: `#177A9C`
-  - Deep Navy: `#1c2d3a` / `#1a2b3c`
-  - Success Green: `#4CAF50`
-  - Error Red: `#EE3535`
+NexLearn uses a premium typography:
 - **Typography**: Inter & Poppins for a modern, professional look.
 
 ## License
