@@ -1,20 +1,21 @@
 export interface QuestionOption {
-  id: number;
+  id: string | number;
   text: string;
 }
 
 export interface ExamQuestion {
-  id: number;
+  id: string | number;
   text: string;
   image?: string;
   options: QuestionOption[];
 }
 
 export interface ExamHistoryDetail {
-  question_id: number;
+  question_id: string | number;
   is_correct: boolean;
-  selected_option_id: number | null;
+  selected_option_id: string | number | null;
 }
+
 
 export interface ExamResultPayload {
   success: boolean;

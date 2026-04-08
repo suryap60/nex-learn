@@ -89,17 +89,26 @@ const InstructionSection: React.FC = () => {
             {/* Instructions Section */}
             <div className="w-full max-w-[800px] text-left">
               <h2 className="text-lg font-bold text-[#1a2b3c] mb-4">Instructions:</h2>
-              <div className="space-y-4 text-[#556677] text-[15px] font-medium leading-relaxed bg-white p-6 rounded-xl border border-[#e5edf5]">
-                <p>{config.instruction || "No specific instructions provided for this exam. Maintain honesty."}</p>
-                
-                <h3 className="font-bold text-[#1a2b3c] text-[16px] mt-6 mb-2">Standard Exam Rules:</h3>
-                <ol className="list-decimal list-outside space-y-3.5 pl-5">
-                  <li>You have {config.total_time} minutes to complete the test.</li>
-                  <li>Test consists of {config.questions_count} multiple-choice q&apos;s.</li>
-                  <li>Each incorrect answer will incur a negative mark of -1/4.</li>
-                  <li>Do not use any external resources such as dictionaries, websites, or assistance.</li>
-                  <li>Your test results will be displayed immediately after submission.</li>
-                </ol>
+              <div className="text-[#556677] text-[15px] font-medium leading-relaxed bg-white p-6 rounded-xl border border-[#e5edf5]">
+                <div 
+                  className="instruction-content"
+                  dangerouslySetInnerHTML={{ __html: config.instruction || "No specific instructions provided for this exam." }} 
+                />
+                <style jsx>{`
+                  .instruction-content :global(ol) {
+                    list-style-type: decimal;
+                    padding-left: 1.5rem;
+                    margin-top: 1rem;
+                    margin-bottom: 1rem;
+                  }
+                  .instruction-content :global(li) {
+                    margin-bottom: 0.75rem;
+                    padding-left: 0.5rem;
+                  }
+                  .instruction-content :global(p) {
+                    margin-bottom: 1rem;
+                  }
+                `}</style>
               </div>
             </div>
 

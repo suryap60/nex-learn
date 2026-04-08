@@ -7,7 +7,7 @@ import LogoutButton from "@/src/components/sections/LogoutButton";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { setAnswer, toggleMarkForReview, setResultData } from "@/src/features/exam/slice";
+import { setAnswer, toggleMarkForReview, setVisited, setResultData } from "@/src/features/exam/slice";
 import { submitAnswers } from "@/src/features/exam/api";
 import { toast } from "react-toastify";
 
@@ -15,7 +15,7 @@ const McqSection: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { questions, config, answers, markedForReview } = useSelector((state: RootState) => state.exam);
+  const { questions, config, answers, markedForReview, visited } = useSelector((state: RootState) => state.exam);
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,19 +70,27 @@ const McqSection: React.FC = () => {
   const currentQ = questions[currentQuestionIndex];
   const qId = currentQ.id;
 
-  const getStatusClass = (questionId: number) => {
+  useEffect(() => {
+    if (qId) {
+      dispatch(setVisited(qId));
+    }
+  }, [qId, dispatch]);
+
+  const getStatusClass = (questionId: string | number) => {
     const answer = answers.find(a => a.question_id === questionId);
     const isMarked = markedForReview.includes(questionId);
     const isAnswered = answer && answer.selected_option_id !== null;
+    const isVisited = visited.includes(questionId);
 
     if (isAnswered && isMarked) return 'bg-[#4CAF50] text-white border-[3px] border-[#800080]';
     if (isMarked) return 'bg-[#800080] text-white border-transparent';
     if (isAnswered) return 'bg-[#4CAF50] text-white border-transparent';
+    if (isVisited) return 'bg-[#EE3535] text-white border-transparent';
     
     return 'bg-white text-[#556677] border-[#e2e8f0]';
   };
 
-  const handleOptionSelect = (optId: number) => {
+  const handleOptionSelect = (optId: string | number) => {
     dispatch(setAnswer({ question_id: qId, selected_option_id: optId }));
   };
 
@@ -92,7 +100,7 @@ const McqSection: React.FC = () => {
   const timeStr = `${Math.floor(timeLeft / 60).toString().padStart(2, '0')}:${(timeLeft % 60).toString().padStart(2, '0')}`;
 
   return (
-    <div className="h-[100dvh] flex flex-col bg-[#F4FCFF] font-inter relative overflow-hidden">
+    <div className="min-h-screen md:h-[100dvh] flex flex-col bg-[#F4FCFF] font-inter relative overflow-y-auto md:overflow-hidden custom-scrollbar">
       {(isModalOpen || isSubmitModalOpen) && (
         <div className="fixed inset-0 bg-black/50 z-40 animate-fade-in" onClick={() => {
           if (!isSubmitting) {
@@ -111,7 +119,7 @@ const McqSection: React.FC = () => {
       </header>
 
       {/* Main */}
-      <main className="max-w-[1450px] w-full mx-auto p-4 md:p-5 lg:p-6 flex flex-col md:flex-row gap-6 flex-1 md:min-h-0">
+      <main className="max-w-[1450px] w-full mx-auto p-4 md:p-5 lg:p-6 flex flex-col md:flex-row gap-6 md:flex-1 md:min-h-0">
         
         {/* Left Section */}
         <div className="flex-[1.65] flex flex-col md:h-full">
@@ -122,7 +130,7 @@ const McqSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-[#e5edf5] p-5 lg:p-7 flex flex-col relative md:flex-1 md:min-h-[0] overflow-y-auto custom-scrollbar">
+          <div className="bg-white rounded-xl shadow-sm border border-[#e5edf5] p-5 lg:p-7 flex flex-col relative md:flex-1 md:min-h-[0] md:overflow-y-auto custom-scrollbar">
             {config.instruction && (
               <Button variant="teal" size="sm" className="mb-5 self-start shrink-0 text-[13px] hover:bg-[#1a8585]" onClick={() => setIsModalOpen(true)}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
@@ -144,9 +152,9 @@ const McqSection: React.FC = () => {
           <div className="mt-3 shrink-0">
             <span className="text-[12px] text-[#8899aa] font-medium mb-2 pl-1 block">Choose the answer:</span>
             <div className="flex flex-col gap-2.5">
-              {currentQ.options.map((opt: any) => (
+              {currentQ.options.map((opt: any, idx: number) => (
                 <div
-                  key={opt.id}
+                  key={opt.id || `opt-${idx}`}
                   onClick={() => handleOptionSelect(opt.id)}
                   className={`flex items-center justify-between px-5 py-3.5 rounded-xl border bg-white cursor-pointer transition-all ${currentAnswer === opt.id ? 'border-[#1c2d3a]' : 'border-[#e2e8f0] hover:border-[#cbd5e0]'}`}
                 >
@@ -192,10 +200,10 @@ const McqSection: React.FC = () => {
           </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-[#e5edf5] p-5 lg:p-6 flex flex-col md:flex-1 md:min-h-[0]">
-            <div className="grid grid-cols-10 gap-x-1 sm:gap-x-2 gap-y-3 md:overflow-y-auto pr-1 md:custom-scrollbar md:flex-1 pb-2">
+            <div className="grid grid-cols-10 gap-x-1 sm:gap-x-2 gap-y-3 md:overflow-y-auto p-1 md:custom-scrollbar md:flex-1 pb-2">
               {questions.map((q: any, i: number) => (
                 <div
-                  key={q.id}
+                  key={q.id || `q-${i}`}
                   onClick={() => setCurrentQuestionIndex(i)}
                   className={`aspect-square w-full min-w-[30px] flex items-center justify-center rounded border text-sm font-medium cursor-pointer transition-all hover:scale-105 ${currentQuestionIndex === i ? 'font-bold ring-2 ring-offset-1 ring-[#1c2d3a]' : ''} ${getStatusClass(q.id)}`}
                 >
@@ -228,8 +236,20 @@ const McqSection: React.FC = () => {
             <div className="p-8 border-b border-[#e5edf5]">
               <h2 className="text-xl font-bold text-[#1a2b3c] font-poppins">Comprehensive Paragraph</h2>
             </div>
-            <div className="p-8 overflow-y-auto custom-scrollbar text-[15px] text-[#2c3e50] leading-[1.8] space-y-6 font-medium">
-              <p>{config.instruction}</p>
+            <div className="p-8 overflow-y-auto custom-scrollbar text-[15px] text-[#2c3e50] leading-[1.8] font-medium instruction-content">
+              <div dangerouslySetInnerHTML={{ __html: config.instruction }} />
+              <style jsx>{`
+                .instruction-content :global(ol) {
+                  list-style-type: decimal;
+                  padding-left: 1.5rem;
+                  margin-top: 1rem;
+                  margin-bottom: 1rem;
+                }
+                .instruction-content :global(li) {
+                  margin-bottom: 0.75rem;
+                  padding-left: 0.5rem;
+                }
+              `}</style>
             </div>
             <div className="p-6 bg-[#fafafa] border-t border-[#e5edf5] flex justify-end">
               <Button variant="primary" size="lg" className="px-12" onClick={() => setIsModalOpen(false)}>Minimize</Button>

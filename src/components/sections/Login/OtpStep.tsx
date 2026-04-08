@@ -9,9 +9,10 @@ interface OtpStepProps {
   phoneNumber: string;
   otp: string;
   setOtp: (val: string) => void;
+  isLoading?: boolean;
 }
 
-const OtpStep: React.FC<OtpStepProps> = ({ onContinue, phoneNumber, otp, setOtp }) => {
+const OtpStep: React.FC<OtpStepProps> = ({ onContinue, phoneNumber, otp, setOtp, isLoading = false }) => {
   return (
     <div className="animate-fade-up flex flex-col h-full">
       <h2 className="text-[28px] font-bold text-[#1a2b3c] mb-2 leading-tight">Enter the code we texted you</h2>
@@ -56,6 +57,7 @@ const OtpStep: React.FC<OtpStepProps> = ({ onContinue, phoneNumber, otp, setOtp 
         fullWidth
         className="mt-auto"
         onClick={onContinue}
+        isLoading={isLoading}
       >
         Get Started
       </Button>

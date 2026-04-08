@@ -8,30 +8,36 @@ import { PiCameraPlusLight } from "react-icons/pi";
 interface DetailsStepProps {
   onContinue: (data?: any) => void;
   isFilled?: boolean;
+  isLoading?: boolean;
 }
 
-const DetailsStep: React.FC<DetailsStepProps> = ({ onContinue, isFilled = false }) => {
-  const [profileImage, setProfileImage] = useState<string | null>(
+const DetailsStep: React.FC<DetailsStepProps> = ({ onContinue, isFilled = false, isLoading = false }) => {
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(
     isFilled ? "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=200&q=80" : null
   );
   const [name, setName] = useState(isFilled ? "Nevin Mathew" : "");
   const [email, setEmail] = useState(isFilled ? "nevinmathew@gmail.com" : "");
   const [qualification, setQualification] = useState(isFilled ? "B.Tech/BE" : "");
-  const [errors, setErrors] = useState<{name?: string; email?: string; qualification?: string}>({});
+  const [errors, setErrors] = useState<{name?: string; email?: string; qualification?: string; profileImage?: string}>({});
   
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const qualificationsList = [
-    "High School", "Diploma", "B.Tech/BE", "BCA", "MCA", "B.Sc", "M.Sc", "MBA", "Other"
+    "High School", "Diploma", "Bachelors", "Masters", "B.Tech/BE", "BCA", "MCA", "B.Sc", "M.Sc", "MBA", "Other"
   ];
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setProfileImageFile(file);
+      
       const reader = new FileReader();
       reader.onload = (re) => {
-        setProfileImage(re.target?.result as string);
+        setPreviewUrl(re.target?.result as string);
       };
-      reader.readAsDataURL(e.target.files[0]);
+      reader.readAsDataURL(file);
+      if (errors.profileImage) setErrors({...errors, profileImage: undefined});
     }
   };
 
@@ -46,11 +52,17 @@ const DetailsStep: React.FC<DetailsStepProps> = ({ onContinue, isFilled = false 
       newErrors.qualification = "Qualification is required";
     }
 
-    if (email) {
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(email)) {
         newErrors.email = "Please enter a valid email address";
       }
+    }
+
+    if (!previewUrl) {
+      newErrors.profileImage = "Profile picture is required";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -58,7 +70,12 @@ const DetailsStep: React.FC<DetailsStepProps> = ({ onContinue, isFilled = false 
       return;
     }
 
-    onContinue({ name, email, profileImage, qualification });
+    onContinue({ 
+      name, 
+      email, 
+      profile_image: profileImageFile, 
+      qualification 
+    });
   };
 
   return (
@@ -66,7 +83,7 @@ const DetailsStep: React.FC<DetailsStepProps> = ({ onContinue, isFilled = false 
       <h2 className="text-[26px] font-bold text-[#1a2b3c] leading-tight mb-2">Add Your Details</h2>
 
       <div 
-        className={`w-[100px] h-[100px] rounded-xl flex flex-col items-center justify-center cursor-pointer mx-auto relative transition-all shrink-0 ${profileImage ? 'border-none' : 'border-2 border-dashed border-[#dddddd] bg-[#fafafa] hover:border-[#1a2b3c]'}`}
+        className={`w-[100px] h-[100px] rounded-xl flex flex-col items-center justify-center cursor-pointer mx-auto relative transition-all shrink-0 ${previewUrl ? 'border-none' : (errors.profileImage ? 'border-2 border-[#e74c3c] bg-[#fff5f5]' : 'border-2 border-dashed border-[#dddddd] bg-[#fafafa] hover:border-[#1a2b3c]')}`}
         onClick={() => fileInputRef.current?.click()}
       >
         <input 
@@ -76,12 +93,13 @@ const DetailsStep: React.FC<DetailsStepProps> = ({ onContinue, isFilled = false 
           onChange={handleFileChange} 
           accept="image/*"
         />
-        {profileImage ? (
+        {previewUrl ? (
           <div className="relative w-full h-full">
-            <img src={profileImage} alt="Profile" className="w-full h-full object-cover rounded-xl" />
+            <img src={previewUrl} alt="Profile" className="w-full h-full object-cover rounded-xl" />
             <div className="absolute -top-2 -right-2 bg-[#e74c3c] text-white w-5 h-5 rounded-full flex items-center justify-center text-xs cursor-pointer shadow-md" onClick={(e) => {
               e.stopPropagation();
-              setProfileImage(null);
+              setPreviewUrl(null);
+              setProfileImageFile(null);
             }}>✕</div>
           </div>
         ) : (
@@ -91,6 +109,7 @@ const DetailsStep: React.FC<DetailsStepProps> = ({ onContinue, isFilled = false 
           </div>
         )}
       </div>
+      {errors.profileImage && <span className="text-xs text-[#e74c3c] text-center block -mt-2">{errors.profileImage}</span>}
 
       <div className="relative group">
         <label className={`absolute -top-2.5 left-4 bg-white px-2 text-[13px] font-medium z-10 ${errors.name ? 'text-[#e74c3c]' : 'text-[#778899] group-focus-within:text-[#2c3e50]'}`}>
@@ -113,7 +132,7 @@ const DetailsStep: React.FC<DetailsStepProps> = ({ onContinue, isFilled = false 
 
       <div className="relative group">
         <label className={`absolute -top-2.5 left-4 bg-white px-2 text-[13px] font-medium z-10 ${errors.email ? 'text-[#e74c3c]' : 'text-[#778899] group-focus-within:text-[#2c3e50]'}`}>
-          Email
+          Email*
         </label>
         <div className={`relative border rounded-lg p-3 flex items-center transition-all ${errors.email ? 'border-[#e74c3c]' : 'border-[#dddddd] focus-within:border-[#2c3e50] focus-within:ring-1 focus-within:ring-[#2c3e50]'}`}>
           <input
@@ -161,6 +180,7 @@ const DetailsStep: React.FC<DetailsStepProps> = ({ onContinue, isFilled = false 
         fullWidth
         className="mt-4 shrink-0"
         onClick={handleNext}
+        isLoading={isLoading}
       >
         Get Started
       </Button>

@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AnswerPayload {
-  question_id: number;
-  selected_option_id: number | null;
+  question_id: string | number;
+  selected_option_id: string | number | null;
 }
 
 export interface QuestionOption {
-  id: number;
+  id: string | number;
   text: string;
 }
 
 export interface ExamQuestion {
-  id: number;
+  id: string | number;
   text: string;
   image?: string;
   options: QuestionOption[];
@@ -29,7 +29,8 @@ interface ExamState {
   } | null;
   answers: AnswerPayload[];
   result: any | null;
-  markedForReview: number[]; // Store question IDs
+  markedForReview: (string | number)[]; // Store question IDs
+  visited: (string | number)[]; // Store question IDs
 }
 
 const initialState: ExamState = {
@@ -38,6 +39,7 @@ const initialState: ExamState = {
   answers: [],
   result: null,
   markedForReview: [],
+  visited: [],
 };
 
 const examSlice = createSlice({
@@ -45,7 +47,16 @@ const examSlice = createSlice({
   initialState,
   reducers: {
     setExamData(state, action: PayloadAction<any>) {
-      state.questions = action.payload.questions || [];
+      state.questions = (action.payload.questions || []).map((q: any) => ({
+        id: String(q.id || q.question_id || ""),
+        text: q.question || q.text || q.question_text || "",
+        image: q.image || q.question_image,
+        options: (q.options || []).map((opt: any) => ({
+          id: String(opt.id || opt.option_id || ""),
+          text: opt.option || opt.text || opt.option_text || ""
+        }))
+      }));
+      
       state.config = {
         questions_count: action.payload.questions_count || 0,
         total_marks: action.payload.total_marks || 0,
@@ -55,26 +66,33 @@ const examSlice = createSlice({
         instruction: action.payload.instruction || "",
       };
       
-      // Initialize fresh answers if needed
-      state.answers = (action.payload.questions || []).map((q: any) => ({
+      // Initialize fresh answers using normalized string IDs
+      state.answers = state.questions.map((q: any) => ({
         question_id: q.id,
         selected_option_id: null,
       }));
+      
       state.markedForReview = [];
+      state.visited = [];
       state.result = null;
     },
-    setAnswer(state, action: PayloadAction<{ question_id: number; selected_option_id: number | null }>) {
+    setAnswer(state, action: PayloadAction<{ question_id: string | number; selected_option_id: string | number | null }>) {
       const idx = state.answers.findIndex(a => a.question_id === action.payload.question_id);
       if (idx !== -1) {
         state.answers[idx].selected_option_id = action.payload.selected_option_id;
       }
     },
-    toggleMarkForReview(state, action: PayloadAction<number>) {
+    toggleMarkForReview(state, action: PayloadAction<string | number>) {
       const qId = action.payload;
       if (state.markedForReview.includes(qId)) {
         state.markedForReview = state.markedForReview.filter(id => id !== qId);
       } else {
         state.markedForReview.push(qId);
+      }
+    },
+    setVisited(state, action: PayloadAction<string | number>) {
+      if (!state.visited.includes(action.payload)) {
+        state.visited.push(action.payload);
       }
     },
     setResultData(state, action: PayloadAction<any>) {
@@ -84,9 +102,10 @@ const examSlice = createSlice({
       state.answers = [];
       state.result = null;
       state.markedForReview = [];
+      state.visited = [];
     }
   },
 });
 
-export const { setExamData, setAnswer, toggleMarkForReview, setResultData, clearExamContext } = examSlice.actions;
+export const { setExamData, setAnswer, toggleMarkForReview, setVisited, setResultData, clearExamContext } = examSlice.actions;
 export default examSlice.reducer;

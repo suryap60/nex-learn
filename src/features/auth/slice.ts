@@ -1,4 +1,3 @@
-// features/auth/slice.ts
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -15,11 +14,15 @@ const authSlice = createSlice({
       state.token = action.payload.token;
 
       localStorage.setItem("access_token", action.payload.token);
+      if (action.payload.refreshToken) {
+        localStorage.setItem("refresh_token", action.payload.refreshToken);
+      }
     },
     logout(state) {
       state.user = null;
       state.token = null;
       localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
     },
   },
 });

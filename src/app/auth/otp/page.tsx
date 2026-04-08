@@ -11,25 +11,48 @@ import { setAuth } from "@/src/features/auth/slice";
 
 function OtpContent() {
   const [otp, setOtp] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const phone = searchParams.get("phone") || "";
   const dispatch = useDispatch();
 
   const handleContinue = async () => {
-    if (!otp) {
-      toast.error("Please enter the OTP");
+    if (!otp || otp.length < 6) {
+      toast.error("Please enter a valid 6-digit OTP");
       return;
     }
+    
+    setIsLoading(true);
     try {
       const response = await verifyOtp(phone, otp);
-      if (response?.data?.token) {
-        dispatch(setAuth({ user: response.data.user || null, token: response.data.token }));
+      const { data } = response;
+      
+      if (data.success) {
+        toast.info(data.message || "OTP verified successfully!");
+        
+        if (data.login && data.access_token) {
+          // User already exists, log them in
+          dispatch(setAuth({ 
+            user: data.user || null, 
+            token: data.access_token,
+            refreshToken: data.refresh_token
+          }));
+          
+          toast.success("Welcome back!");
+          router.push("/exam"); // Redirect to exam instructions page
+        } else {
+          // New user, go to profile creation
+          router.push(`/auth/profile?phone=${encodeURIComponent(phone)}`);
+        }
+      } else {
+        toast.error(data.message || "Verification failed");
       }
-      toast.success("OTP verified successfully!");
-      router.push(`/auth/profile?phone=${encodeURIComponent(phone)}`);
     } catch (error: any) {
+      console.error("OTP verify error:", error);
       toast.error(error.response?.data?.message || "Invalid OTP. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -39,6 +62,7 @@ function OtpContent() {
       phoneNumber={phone}
       otp={otp}
       setOtp={setOtp}
+      isLoading={isLoading}
     />
   );
 }

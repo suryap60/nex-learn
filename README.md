@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NexLearn - Premium MCQ Exam Platform
+
+NexLearn is a state-of-the-art web application designed for a premium exam-taking experience. It features a robust multi-step authentication flow and a highly interactive exam interface with real-time status tracking and automated evaluation.
+
+##  Features
+
+### Advanced Authentication
+- **Multi-Step Flow**: Seamless transition from Phone Verification → OTP → Profile Creation.
+- **Dynamic Country Selection**: Support for multiple country codes with visual flag indicators (India by default).
+- **Secure Token Management**: Built-in persistence for access and refresh tokens with automatic request interception.
+
+###  Exam Module
+- **Rich Instruction Rendering**: Supports complex HTML instructions for comprehensive paragraphs.
+- **Interactive MCQ Interface**: Modern, responsive layout for questions and options.
+- **Status Sheet**: Real-time tracking of questions (Answered, Not Attended, Marked for Review).
+- **Automatic Test Submission**: Built-in timer that auto-submits your test when time runs out.
+- **Manual Review**: Question sheet allows jumping between questions and marking items for later review.
+
+### Results Dashboard
+- **Instant Evaluation**: Real-time scoring upon submission.
+- **Visual Analytics**: Beautifully designed scorecards with color-coded statistics (Correct, Wrong, Not Attended).
+- **History Integration**: Prepared for persistent exam history tracking.
+
+##  Tech Stack
+- **Frontend**: Next.js 14+ (App Router)
+- **Styling**: Tailwind CSS & CSS-in-JS (Styled-JSX)
+- **State Management**: Redux Toolkit
+- **API Client**: Axios with Interceptors
+- **Notifications**: React Toastify
+- **Icons**: React Icons (Pi, Hi, etc.)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 18+
+- npm or yarn
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone [repository-url]
+   cd nex-learn
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Configure Environment:
+   Update `src/services/config.ts` with API base URL:
+   ```typescript
+   export const API_BASE_URL = "https://nexlearn.noviindusdemosites.in/";
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-## Learn More
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
+- `src/app`: Next.js pages and layouts.
+- `src/components`: Reusable UI components and business sections.
+- `src/features`: Redux slices and API logic organized by domain (auth, exam).
+- `src/services`: Axios configuration and global constants.
+- `src/store`: Centralized Redux store configuration.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Design System
+NexLearn uses a curate color palette and premium typography:
+- **Brand Colors**: 
+  - Primary Teal: `#177A9C`
+  - Deep Navy: `#1c2d3a` / `#1a2b3c`
+  - Success Green: `#4CAF50`
+  - Error Red: `#EE3535`
+- **Typography**: Inter & Poppins for a modern, professional look.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+Privately developed for NexLearn. All rights reserved.
