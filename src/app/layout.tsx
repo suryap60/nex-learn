@@ -5,8 +5,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata: Metadata = {
-  title: 'NexLearn',
-  description: 'Recreating Figma designs with pixel perfection and high performance.',
+  title: 'NexLearn | Advanced MCQ Exam Platform',
+  description: 'Experience a premium, futuristic learning and examination platform with NexLearn. Real-time MCQ tests, detailed analytics, and seamless authentication.',
+  keywords: ['exam platform', 'MCQ test', 'online examination', 'learning management system', 'NexLearn'],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
